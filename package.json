@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=production node dist/index.js",
+    "build": "rm -rf dist && tsc",
+    "dev": "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +15,7 @@
   "devDependencies": {
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3"
   },
   "dependencies": {
@@ -20,5 +24,8 @@
     "dotenv": "^16.4.5",
     "ffmpeg-static": "^5.2.0",
     "ytdl-core": "^4.11.5"
+  },
+  "_moduleAliases": {
+    "@": "dist"
   }
 }
