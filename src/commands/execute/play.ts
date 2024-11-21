@@ -76,6 +76,7 @@ export const play = {
       } else {
         console.log("Input is a single video");
         const song = await YoutubeService.getVideoDetails(input);
+        console.log("Song:", song);
         const queueItem: QueueItem = {
           song,
           requester: interaction.member?.user.username as string,

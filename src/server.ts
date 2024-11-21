@@ -131,12 +131,14 @@ export class Server {
     try {
       // if there are songs in the queue, we start playing the first one
       // stream the audio depending on the platform and then create an audio resource from the stream and play it
+      console.log("preparing to play the next song");
       if (this.queue.length > 0) {
         this.playing = this.queue.shift() as QueueItem;
         let stream: any;
         const highWaterMark = 1024 * 1024 * 10;
-        //
+        // if the song is from youtube, use ytdl to stream the audio else use scdl-core for soundcloud
         if (this.playing?.song.platform === Platform.YOUTUBE) {
+          console.log("use ytdl to stream the audio fron youtube");
           stream = ytdl(this.playing.song.url, {
             highWaterMark,
             filter: 'audioonly',
@@ -147,7 +149,9 @@ export class Server {
             highWaterMark,
           });
         }
+        console.log("creating audio resource from the stream");
         const audioResource = createAudioResource(stream);
+        console.log("playing the audio resource");
         this.audioPlayer.play(audioResource);
       } else {
         // if there are no songs in the queue, we stop the player

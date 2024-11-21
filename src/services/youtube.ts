@@ -4,10 +4,11 @@ import { Playlist } from '../types/playlist';
 import { Platform, Song } from '../types/song';
 import ytdl from "@distube/ytdl-core";
 import ytpl from 'ytpl';
-import ytsr, { Video } from 'ytsr';
+import ytsr, { Video } from '@distube/ytsr';
 
 export class YoutubeService {
   public static async getVideoDetails(content: string): Promise<Song> {
+    console.log("get video details: ", content);
     const parsedContent = content.match(youtubeVideoRegex);
     let id = '';
     if (!parsedContent) {
@@ -33,6 +34,7 @@ export class YoutubeService {
   }
 
   public static async getPlaylist(url: string): Promise<Playlist> {
+    console.log("get playlist with this url: ", url);
     const id = url.split('?')[1].split('=')[1];
     const playlist = await ytpl(id);
     const songs: Song[] = [];
@@ -56,7 +58,8 @@ export class YoutubeService {
   }
 
   private static async searchVideo(keyword: string): Promise<string> {
-    const result = await ytsr(keyword, { pages: 1 });
+    console.log("search video with keyword: ", keyword);
+    const result = await ytsr(keyword, { limit: 1 });
     const filteredRes = result.items.filter((item) => item.type === 'video');
     if (filteredRes.length === 0) throw new Error();
     const item = filteredRes[0] as Video;
@@ -64,12 +67,14 @@ export class YoutubeService {
   }
 
   public static isPlaylist(url: string): string | null {
+    console.log("check if it is playlist with url: ", url);
     const paths = url.match(youtubePlaylistRegex);
     if (paths) return paths[0];
     return null;
   }
 
   private static generateVideoUrl(id: string) {
+    console.log("generate video url with id: ", id);
     return `https://www.youtube.com/watch?v=${id}`;
   }
 }

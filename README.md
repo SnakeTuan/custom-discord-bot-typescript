@@ -15,4 +15,4 @@ start the bot: ```npm run dev``` -> Check if the bot go online in your server
 
 deploy the bot: ```!shrek``` (this is the command I use, you can change it in the file deploy-commands.ts)
 
-try playing the song with ```/play <the url or the keyword to search>```
+try playing a song with ```/play <the url or the keyword to search>```
