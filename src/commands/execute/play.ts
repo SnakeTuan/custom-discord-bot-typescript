@@ -8,7 +8,7 @@ import { createEmbedMessage } from '../../utils/create-embed-message';
 
 export const play = {
   name: 'play',
-  execute: async (interaction: CommandInteraction): Promise<void> => {
+  execute: async (interaction: CommandInteraction) => {
     await interaction.deferReply();
     let server = servers.get(interaction.guildId as string);
     if (!server) {

@@ -9,6 +9,8 @@ import { Client, GatewayIntentBits } from "discord.js";
 import { deploy } from "./commands/deploy-command";
 import { SoundCloud } from 'scdl-core';
 import { play } from "./commands/execute/play";
+import { skip } from "./commands/execute/skip";
+import { help } from "./commands/execute/help";
 import messages from "./collections/messages";
 
 console.log("Starting bot...");
@@ -38,6 +40,12 @@ client.login(process.env.TOKEN).then(async() => {
       switch (interaction.commandName) {
         case play.name:
           play.execute(interaction);
+          break;
+        case skip.name:
+          skip.execute(interaction);
+          break;
+        case help.name:
+          help.execute(interaction);
           break;
       }
     } catch (e) {
