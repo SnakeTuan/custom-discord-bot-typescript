@@ -8,10 +8,13 @@ if (process.env.NODE_ENV === "production") {
 import { Client, GatewayIntentBits } from "discord.js";
 import { deploy } from "./commands/deploy-command";
 import { SoundCloud } from 'scdl-core';
+import messages from "./collections/messages";
 import { play } from "./commands/execute/play";
 import { skip } from "./commands/execute/skip";
 import { help } from "./commands/execute/help";
-import messages from "./collections/messages";
+import { ping } from "./commands/execute/ping";
+import { soundcloud } from "./commands/execute/soundcloud";
+
 
 console.log("Starting bot...");
 
@@ -46,6 +49,12 @@ client.login(process.env.TOKEN).then(async() => {
           break;
         case help.name:
           help.execute(interaction);
+          break;
+        case ping.name:
+          ping.execute(client, interaction);
+          break;
+        case soundcloud.name:
+          soundcloud.execute(interaction);
           break;
       }
     } catch (e) {
