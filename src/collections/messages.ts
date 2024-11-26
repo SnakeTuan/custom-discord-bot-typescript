@@ -24,4 +24,6 @@ export default {
   removed: '🗑 Removed',
   help: '💡 Help',
   ping: '📶 Ping',
+  login: '🔑 Login',
+  shop: '🛒 Shop',
 };

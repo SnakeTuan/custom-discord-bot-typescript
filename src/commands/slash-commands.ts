@@ -34,55 +34,39 @@ export const schema: ApplicationCommandData[] = [
     description: 'Skip to the next song in the queue',
   },
   {
-    name: 'queue',
-    description: 'See the music queue',
-  },
-  {
-    name: 'pause',
-    description: 'Pauses the song that is currently playing',
-  },
-  {
-    name: 'resume',
-    description: 'Resume playback of the current song',
-  },
-  {
-    name: 'leave',
-    description: 'Leave the voice channel',
-  },
-  {
-    name: 'nowplaying',
-    description: 'See the song that is currently playing',
-  },
-  {
-    name: 'jump',
-    description: 'Jump to song in queue by position',
-    options: [
-      {
-        name: 'position',
-        type: ApplicationCommandOptionType.Number,
-        description: 'The position of song in queue',
-        required: true,
-      },
-    ],
-  },
-  {
-    name: 'remove',
-    description: 'Remove song in queue by position',
-    options: [
-      {
-        name: 'position',
-        type: ApplicationCommandOptionType.Number,
-        description: 'The position of song in queue',
-        required: true,
-      },
-    ],
-  },
-  {
     name: 'ping',
     description: 'See the ping to server',
   },
   {
     name: 'help',
     description: 'See the help for this bot',
+  },
+  {
+    name: "login",
+    description: "Log in with your Riot username/password!",
+    options: [
+        {
+            type: ApplicationCommandOptionType.String,
+            name: "username",
+            description: "Your Riot username",
+            required: true
+        },
+        {
+            type: ApplicationCommandOptionType.String,
+            name: "password",
+            description: "Your Riot password",
+            required: true
+        },
+    ]
+  },
+  {
+    name: "shop",
+    description: "Show your current daily shop!",
+    options: [{
+        type: ApplicationCommandOptionType.User,
+        name: "user",
+        description: "Optional: see the daily shop of someone else!",
+        required: false
+    }]
   },
 ];
