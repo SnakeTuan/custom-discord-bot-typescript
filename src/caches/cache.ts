@@ -1,6 +1,6 @@
 import { getValorantVersion } from "./version";
-import { asyncReadJSONFile } from "@/utils/json";
-
+import { asyncReadJSONFile } from "../utils/json";
+import config from "../utils/val-config";
 import fs from "fs";
 
 const formatVersion = 14;

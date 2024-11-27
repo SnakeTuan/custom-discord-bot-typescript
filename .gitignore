@@ -4,3 +4,5 @@ node_modules
 
 val-data/
 val-data/skin.json
+
+val-config.json
