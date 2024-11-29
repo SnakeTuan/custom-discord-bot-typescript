@@ -26,4 +26,5 @@ export default {
   ping: '📶 Ping',
   login: '🔑 Login',
   shop: '🛒 Shop',
+  cookie: 'Cookie',
 };

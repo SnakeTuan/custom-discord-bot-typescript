@@ -60,6 +60,18 @@ export const schema: ApplicationCommandData[] = [
     ]
   },
   {
+    name: "cookies",
+    description: "Log in with your cookies",
+    options: [
+        {
+            type: ApplicationCommandOptionType.String,
+            name: "cookies",
+            description: "Your cookies which can be taken from the browser",
+            required: true
+        },
+    ]
+  },
+  {
     name: "shop",
     description: "Show your current daily shop!",
     options: [{

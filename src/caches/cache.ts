@@ -1,5 +1,7 @@
 import { getValorantVersion } from "./version";
 import { asyncReadJSONFile } from "../utils/json";
+import { getUser, getUserList } from "../utils/val-user";
+import { authUser } from "../utils/val-auth";
 import config from "../utils/val-config";
 import fs from "fs";
 
@@ -128,3 +130,66 @@ export const getSkinList = async (gameVersion: string) => {
 //     });
 // };
 // initialize();
+
+const getPrices = async (gameVersion: string, id: string | null = null) => {
+  if (!config.fetchSkinPrices) return;
+
+  // if no ID is passed, try with all users
+  if (id === null) {
+    for (const id of getUserList()) {
+      const user = getUser(id);
+      if (!user || !user.auth) {
+        continue;
+      }
+      const success = await getPrices(gameVersion, id);
+      if (success) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // if ID is passed, try with that user
+  let user = getUser(id);
+  if (!user) return false;
+
+  const authSuccess = await authUser(id);
+  if (!authSuccess.success || !user.auth.rso || !user.auth.ent || !user.region)
+    return false;
+
+  user = getUser(id);
+  console.log(`Fetching skin prices using ${user.username}'s access token...`);
+
+  // https://github.com/techchrism/valorant-api-docs/blob/trunk/docs/Store/GET%20Store_GetOffers.md
+  const req = await fetch(
+    `https://pd.${userRegion(user)}.a.pvp.net/store/v1/offers/`,
+    {
+      headers: {
+        Authorization: "Bearer " + user.auth.rso,
+        "X-Riot-Entitlements-JWT": user.auth.ent,
+        ...riotClientHeaders(),
+      },
+    }
+  );
+  console.assert(
+    req.statusCode === 200,
+    `Valorant skins prices code is ${req.statusCode}!`,
+    req
+  );
+
+  const json = JSON.parse(req.body);
+  if (json.httpStatus === 400 && json.errorCode === "BAD_CLAIMS") {
+    return false; // user rso is invalid, should we delete the user as well?
+  } else if (isMaintenance(json)) return false;
+
+  prices = { version: gameVersion };
+  for (const offer of json.Offers) {
+    prices[offer.OfferID] = offer.Cost[Object.keys(offer.Cost)[0]];
+  }
+
+  prices.timestamp = Date.now();
+
+  saveSkinsJSON();
+
+  return true;
+};

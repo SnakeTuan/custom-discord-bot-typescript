@@ -13,8 +13,8 @@ import { play } from "./commands/execute/play";
 import { skip } from "./commands/execute/skip";
 import { help } from "./commands/execute/help";
 import { ping } from "./commands/execute/ping";
-import { login } from "./commands/execute/login";
 import { soundcloud } from "./commands/execute/soundcloud";
+import { cookies } from "./commands/execute/cookies";
 
 console.log("Starting bot...");
 
@@ -58,9 +58,8 @@ client
           case soundcloud.name:
             soundcloud.execute(interaction);
             break;
-          case login.name:
-            login.execute(interaction);
-            break;
+          case cookies.name:
+            cookies.execute(interaction);
         }
       } catch (e) {
         interaction.reply(messages.error);
