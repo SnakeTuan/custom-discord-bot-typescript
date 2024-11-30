@@ -13,8 +13,11 @@ import { play } from "./commands/execute/play";
 import { skip } from "./commands/execute/skip";
 import { help } from "./commands/execute/help";
 import { ping } from "./commands/execute/ping";
+import { shop } from "./commands/execute/shop";
 import { soundcloud } from "./commands/execute/soundcloud";
 import { cookies } from "./commands/execute/cookies";
+
+import { fetchRiotVersionData } from "./auth/riot";
 
 console.log("Starting bot...");
 
@@ -39,6 +42,7 @@ client
     console.log("Logged in successfully");
     await SoundCloud.connect();
     deploy(client);
+    fetchRiotVersionData().then(() => console.log("Fetched latest Riot user-agent!"));
     client.on("interactionCreate", async (interaction) => {
       if (!interaction.isCommand() || !interaction.guildId) return;
       try {
@@ -60,6 +64,10 @@ client
             break;
           case cookies.name:
             cookies.execute(interaction);
+            break;
+          case shop.name:
+            shop.execute(interaction);
+            break;
         }
       } catch (e) {
         interaction.reply(messages.error);

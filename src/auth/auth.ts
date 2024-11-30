@@ -1,6 +1,8 @@
 import { extractTokensFromUri, decodeToken, getAccountWithPuuid } from "@/utils/val-auth";
-import { User } from "@/utils/val-user";
+import { User } from "@/types/user";
 import { config } from "@/utils/val-config";
+import { getUser, saveUser } from "@/utils/val-user";
+import { tokenExpiry, refreshToken } from "@/utils/val-token";
 
 export const processAuthResponse = async (id: string, authData: any, redirect: any, user: any | null = null) => {
   if (!user) {
@@ -20,6 +22,9 @@ export const processAuthResponse = async (id: string, authData: any, redirect: a
     );
     throw new Error("Riot servers didn't return an RSO token!");
   }
+
+  // console.log("rso: ", rso);
+  // console.log("idt: ", idt);
 
   user.auth = {
     ...user.auth,
@@ -125,4 +130,34 @@ export const getRegion = async (user: any) => {
   const bodyText = await req.text();
   const json = JSON.parse(bodyText);
   return json.affinities.live;
+};
+
+export const authUser = async (id: string, account = null) => {
+  // doesn't check if token is valid, only checks it hasn't expired
+  console.log("checking if token is expired...");
+  const user = getUser(id);
+  if (!user || !user.auth || !user.auth.rso) return { success: false };
+
+  const rsoExpiry = tokenExpiry(user.auth.rso);
+  if (rsoExpiry - Date.now() > 10_000) return { success: true };
+
+  return await refreshToken(id);
+};
+
+export const stringifyCookies = (cookies: any) => {
+  const cookieList = [];
+  for (let [key, value] of Object.entries(cookies)) {
+    cookieList.push(key + "=" + value);
+  }
+  return cookieList.join("; ");
+};
+
+export const deleteUserAuth = (user: any) => {
+  user.auth = null;
+  saveUser(user);
+};
+
+export const userRegion = ({ region }: { region: string }) => {
+  if (!region || region === "latam" || region === "br") return "na";
+  return region;
 };

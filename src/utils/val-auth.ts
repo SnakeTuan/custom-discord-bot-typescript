@@ -1,5 +1,4 @@
-import { getUser, readUserJson } from "./val-user";
-import { tokenExpiry } from "./val-token";
+import { readUserJson } from "./val-user";
 
 // export const authUser = async (id: string, account = null) => {
 //   // doesn't check if token is valid, only checks it hasn't expired
@@ -15,6 +14,7 @@ import { tokenExpiry } from "./val-token";
 export const extractTokensFromUri = (uri: string) => {
   // thx hamper for regex
   const match = uri.match(/access_token=((?:[a-zA-Z]|\d|\.|-|_)*).*id_token=((?:[a-zA-Z]|\d|\.|-|_)*).*expires_in=(\d*)/);
+  // console.log("tokens extracted from uri: ", match);
   if (!match) return [null, null];
 
   const [, accessToken, idToken] = match;

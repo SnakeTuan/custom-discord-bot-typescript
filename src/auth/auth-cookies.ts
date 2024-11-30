@@ -19,10 +19,10 @@ export const redeemCookies = async (id: string, cookies: string) => {
 
     if (detectCloudflareBlock(req)) return { success: false, rateLimit: "cloudflare" };
 
-    if (req.headers.location && req.headers.location.startsWith("/login")) return false; // invalid cookies
+    if (req.headers.location && req.headers.location.startsWith("/login")) return { success: false }; // invalid cookies
 
-    // console.log('req.headers: ', req.headers)
-    // console.log('req.body: ', req.body)
+    // console.log("req.headers: ", req.headers);
+    // console.log("req.body: ", req.body);
     const getCookieHeader = req.headers["set-cookie"];
     const combine_cookies = {
       ...parseSetCookie(cookies),
@@ -32,12 +32,13 @@ export const redeemCookies = async (id: string, cookies: string) => {
     console.log("combine_cookies: ", combine_cookies);
 
     const user = await processAuthResponse(id, { combine_cookies }, req.headers.location);
+
     addUser(user);
 
-    return true;
+    return { success: true };
   } catch (e) {
-    console.error("Error redeeming cookies:");
-    return false;
+    console.error("Error redeeming cookies:", e);
+    return { success: false };
   }
 };
 

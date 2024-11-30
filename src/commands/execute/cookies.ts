@@ -1,9 +1,6 @@
 import { CommandInteraction } from "discord.js";
 import path from "path";
 import { redeemCookies } from "@/auth/auth-cookies";
-import { createEmbedMessage } from "@/utils/create-embed-message";
-
-const userDataPath = path.join(__dirname, "../../../data/users.json");
 
 export const cookies = {
   name: "cookies",
@@ -17,7 +14,7 @@ export const cookies = {
     const loginResult = await redeemCookies(interaction.user.id, cookies);
     console.log("loginResult: ", loginResult);
 
-    if (loginResult) {
+    if (loginResult.success) {
       await interaction.followUp("Logged in successfully!");
     } else {
       await interaction.followUp("Login failed. Please check your credentials.");

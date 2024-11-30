@@ -1,68 +1,22 @@
 import fs from "fs";
-import { ensureUsersFolder, removeDupeAlerts } from "./validate";
+import { ensureUsersFolder, removeDupeAlerts } from "./handle-file";
 import { defaultSettings } from "./val-setting";
 
-export class User {
-  id: string;
-  puuid: string;
-  auth: string;
-  alerts: any[];
-  username: string;
-  region: string;
-  authFailures: number;
-  lastFetchedData: number;
-  lastNoticeSeen: string;
-  lastSawEasterEgg: number;
-
-  constructor({
-    id,
-    puuid,
-    auth,
-    alerts = [],
-    username,
-    region,
-    authFailures,
-    lastFetchedData,
-    lastNoticeSeen,
-    lastSawEasterEgg,
-  }: {
-    id: string;
-    puuid: string;
-    auth: string;
-    alerts?: any[];
-    username: string;
-    region: string;
-    authFailures?: number;
-    lastFetchedData?: number;
-    lastNoticeSeen?: string;
-    lastSawEasterEgg?: number;
-  }) {
-    this.id = id;
-    this.puuid = puuid;
-    this.auth = auth;
-    this.alerts = alerts || [];
-    this.username = username;
-    this.region = region;
-    this.authFailures = authFailures || 0;
-    this.lastFetchedData = lastFetchedData || 0;
-    this.lastNoticeSeen = lastNoticeSeen || "";
-    this.lastSawEasterEgg = lastSawEasterEgg || 0;
-  }
-}
+import { User } from "@/types/user";
 
 const userFilenameRegex = /\d+\.json/;
 
 export const getUserList = (): string[] => {
   ensureUsersFolder();
   return fs
-    .readdirSync("../val-data/users")
+    .readdirSync("val-data/users")
     .filter((filename) => userFilenameRegex.test(filename))
     .map((filename) => filename.replace(".json", ""));
 };
 
 export const readUserJson = (id: string) => {
   try {
-    return JSON.parse(fs.readFileSync("../val-data/users/" + id + ".json", "utf-8"));
+    return JSON.parse(fs.readFileSync("val-data/users/" + id + ".json", "utf-8"));
   } catch (e) {
     return null;
   }
@@ -70,7 +24,7 @@ export const readUserJson = (id: string) => {
 
 export const saveUserJson = (id: string, json: any) => {
   ensureUsersFolder();
-  fs.writeFileSync("./val-data/users/" + id + ".json", JSON.stringify(json, null, 2));
+  fs.writeFileSync("val-data/users/" + id + ".json", JSON.stringify(json, null, 2));
 };
 
 export const getUserJson = (id: string, account: any | null = null) => {
@@ -93,6 +47,7 @@ export const getUserJson = (id: string, account: any | null = null) => {
 };
 
 export const getUser = (id: any, account = null) => {
+  console.log("Finding riot user with this discord id: ", id);
   if (id instanceof User) {
     const user = id;
     const userJson = readUserJson(user.id);
@@ -110,6 +65,7 @@ export const getUser = (id: any, account = null) => {
 };
 
 export const addUser = (user: any) => {
+  console.log("Adding riot user with this discord id: ", user);
   const userJson = readUserJson(user.id);
   if (userJson) {
     // check for duplicate accounts
@@ -145,5 +101,25 @@ export const addUser = (user: any) => {
       settings: defaultSettings,
     };
     saveUserJson(user.id, objectToWrite);
+  }
+};
+
+export const saveUser = (user: any, account = null) => {
+  if (!fs.existsSync("val-data/users")) fs.mkdirSync("val-data/users");
+
+  const userJson = readUserJson(user.id);
+  if (!userJson) {
+    const objectToWrite = {
+      accounts: [user],
+      currentAccount: 1,
+      settings: defaultSettings,
+    };
+    saveUserJson(user.id, objectToWrite);
+  } else {
+    if (!account) account = userJson.accounts.findIndex((a: any) => a.puuid === user.puuid) + 1 || userJson.currentAccount;
+    if (account && account > userJson.accounts.length) account = userJson.accounts.length;
+
+    userJson.accounts[(account || userJson.currentAccount) - 1] = user;
+    saveUserJson(user.id, userJson);
   }
 };
