@@ -65,7 +65,6 @@ export const getUser = (id: any, account = null) => {
 };
 
 export const addUser = (user: any) => {
-  console.log("Adding riot user with this discord id: ", user);
   const userJson = readUserJson(user.id);
   if (userJson) {
     // check for duplicate accounts

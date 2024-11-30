@@ -19,6 +19,11 @@ import { cookies } from "./commands/execute/cookies";
 
 import { fetchRiotVersionData } from "./auth/riot";
 
+export const discordTag = (id: any) => {
+  const user = client.users.cache.get(id);
+  return user ? `${user.username}#${user.discriminator}` : id;
+};
+
 console.log("Starting bot...");
 
 const client = new Client({

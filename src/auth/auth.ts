@@ -32,17 +32,9 @@ export const processAuthResponse = async (id: string, authData: any, redirect: a
     idt: idt,
   };
 
-  // save either cookies or login/password
-  if (authData.login && config.storePasswords && !user.auth.waiting2FA) {
-    // don't store login/password for people with 2FA
-    user.auth.login = authData.login;
-    user.auth.password = btoa(authData.password);
-    delete user.auth.cookies;
-  } else {
-    user.auth.cookies = authData.cookies;
-    delete user.auth.login;
-    delete user.auth.password;
-  }
+  // save cookies to reuse
+  // console.log("authData cookies: ", authData);
+  user.auth.cookies = authData;
 
   user.puuid = decodeToken(rso).sub;
 
@@ -136,10 +128,17 @@ export const authUser = async (id: string, account = null) => {
   // doesn't check if token is valid, only checks it hasn't expired
   console.log("checking if token is expired...");
   const user = getUser(id);
-  if (!user || !user.auth || !user.auth.rso) return { success: false };
+  console.log("user: ", user);
+  if (!user || !user.auth || !user.auth.rso) {
+    console.log("no user or auth or rso");
+    return { success: false };
+  }
 
   const rsoExpiry = tokenExpiry(user.auth.rso);
-  if (rsoExpiry - Date.now() > 10_000) return { success: true };
+  if (rsoExpiry - Date.now() > 10_000) {
+    console.log("token is not expired");
+    return { success: true };
+  }
 
   return await refreshToken(id);
 };

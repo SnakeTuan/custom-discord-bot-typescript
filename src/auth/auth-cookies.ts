@@ -29,9 +29,9 @@ export const redeemCookies = async (id: string, cookies: string) => {
       ...parseSetCookie(getCookieHeader),
     };
 
-    console.log("combine_cookies: ", combine_cookies);
+    // console.log("combine_cookies: ", combine_cookies);
 
-    const user = await processAuthResponse(id, { combine_cookies }, req.headers.location);
+    const user = await processAuthResponse(id, combine_cookies, req.headers.location);
 
     addUser(user);
 

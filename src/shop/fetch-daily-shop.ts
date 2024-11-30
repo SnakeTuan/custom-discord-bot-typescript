@@ -3,6 +3,7 @@ import { getUser } from "@/utils/val-user";
 import { authUser, userRegion, deleteUserAuth } from "@/auth/auth";
 import { riotClientHeaders } from "@/auth/riot";
 import { fetch } from "@/utils/custom-fetch";
+import { addShopCache } from "@/caches/shop-cache";
 
 export const fetchShop = async (interaction: CommandInteraction) => {
   const user = getUser(interaction.user.id);
@@ -10,14 +11,16 @@ export const fetchShop = async (interaction: CommandInteraction) => {
 
   let shop = await getShop(interaction.user.id);
 
-  return { success: true };
+  return { success: true, shop };
   // return await renderOffers(shop, interaction, user, await emojiPromise, targetId);
 };
 
 export const getShop = async (id: string, account = null) => {
   const authSuccess = await authUser(id, account);
-  if (!authSuccess.success) return authSuccess;
-
+  console.log("authSuccess: ", authSuccess);
+  if (!authSuccess.success) {
+    return authSuccess;
+  }
   const user = getUser(id, account);
   console.log(`Fetching shop for ${user.username}...`);
 
@@ -40,7 +43,7 @@ export const getShop = async (id: string, account = null) => {
     return { success: false };
   }
 
-  console.log("fetching shop response: ", json);
+  // console.log("fetching shop response: ", json);
 
   // shop stats tracking
   // try {
@@ -51,13 +54,13 @@ export const getShop = async (id: string, account = null) => {
   //   console.error(json);
   // }
 
-  // // add to shop cache
-  // addShopCache(user.puuid, json);
+  // add to shop cache
+  addShopCache(user.puuid, json);
 
   // // save bundle data & prices
   // Promise.all(json.FeaturedBundle.Bundles.map((rawBundle) => formatBundle(rawBundle))).then(async (bundles) => {
   //   for (const bundle of bundles) await addBundleData(bundle);
   // });
 
-  // return { success: true, shop: json };
+  return { success: true, shop: json };
 };

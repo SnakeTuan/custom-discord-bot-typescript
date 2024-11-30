@@ -1,7 +1,7 @@
 export class User {
   id: string;
   puuid: string;
-  auth: string;
+  auth: any;
   alerts: any[];
   username: string;
   region: string;
@@ -24,7 +24,7 @@ export class User {
   }: {
     id: string;
     puuid: string;
-    auth: string;
+    auth: any;
     alerts?: any[];
     username: string;
     region: string;
