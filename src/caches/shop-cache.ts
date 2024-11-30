@@ -100,3 +100,24 @@ export const formatNightMarket = (rawNightMarket: any) => {
     expires: Math.floor(Date.now() / 1000) + rawNightMarket.BonusStoreRemainingDurationInSeconds,
   };
 };
+
+export const getShopCache = (puuid: string) => {
+  try {
+    const shopCache = JSON.parse(fs.readFileSync("val-data/shopCache/" + puuid + ".json", "utf8"));
+
+    let expiresTimestamp;
+    // get expiry timestamp for the daily shop
+    expiresTimestamp = shopCache["offers"].expires;
+
+    if (Date.now() / 1000 > expiresTimestamp) {
+      return null;
+    }
+
+    console.log(`Fetched shop cache for user ${discordTag(puuid)}`);
+
+    return shopCache;
+  } catch (e) {
+    console.log("error while reading shop cache: ", e);
+    return null;
+  }
+};

@@ -1,12 +1,13 @@
 import { asyncReadJSONFile } from "@/utils/handle-file";
 import fs from "fs";
+import path from "path";
 
 const formatVersion = 14;
 let gameVersion: any;
 let weapons: any, skins: any, rarities: any, buddies: any, sprays: any, cards: any, titles: any, bundles: any, battlepass: any;
 let prices = { timestamp: null };
 
-export const loadSkinsJSON = async (filename = "@/val-data/skins.json") => {
+export const loadSkinsJSON = async (filename = "val-data/skins.json") => {
   const jsonData = await asyncReadJSONFile(filename).catch(() => {});
   if (!jsonData || jsonData.formatVersion !== formatVersion) return;
 
@@ -22,7 +23,17 @@ export const loadSkinsJSON = async (filename = "@/val-data/skins.json") => {
   battlepass = jsonData.battlepass;
 };
 
-export const saveSkinsJSON = (filename = "@/val-data/skins.json") => {
+export const loadSkinsList = async () => {
+  try {
+    const skinList = JSON.parse(fs.readFileSync("val-data/skins.json", "utf8"));
+    return skinList;
+  } catch (error) {
+    console.error("Error loading skins data:", error);
+    return null;
+  }
+};
+
+export const saveSkinsJSON = (filename = "val-data/skins.json") => {
   fs.writeFileSync(
     filename,
     JSON.stringify(
@@ -98,6 +109,7 @@ export const getSkinList = async (gameVersion: string) => {
   saveSkinsJSON();
   return json;
 };
+
 // for test the getSkinList function:
 // const initialize = async () => {
 //   gameVersion = (await getValorantVersion()).manifestId;

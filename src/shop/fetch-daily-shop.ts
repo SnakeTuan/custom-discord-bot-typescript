@@ -7,11 +7,15 @@ import { addShopCache } from "@/caches/shop-cache";
 
 export const fetchShop = async (interaction: CommandInteraction) => {
   const user = getUser(interaction.user.id);
-  if (!user) return { success: false };
+  if (!user) return null;
 
   let shop = await getShop(interaction.user.id);
 
-  return { success: true, shop };
+  if (!shop.success) {
+    return null;
+  }
+
+  return shop.shop;
   // return await renderOffers(shop, interaction, user, await emojiPromise, targetId);
 };
 

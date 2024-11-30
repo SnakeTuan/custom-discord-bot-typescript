@@ -16,13 +16,15 @@ import { ping } from "./commands/execute/ping";
 import { shop } from "./commands/execute/shop";
 import { soundcloud } from "./commands/execute/soundcloud";
 import { cookies } from "./commands/execute/cookies";
-
+import { getSkinList } from "./caches/save-skin";
 import { fetchRiotVersionData } from "./auth/riot";
 
 export const discordTag = (id: any) => {
   const user = client.users.cache.get(id);
   return user ? `${user.username}#${user.discriminator}` : id;
 };
+
+let gameVersion: any = null;
 
 console.log("Starting bot...");
 
@@ -47,7 +49,13 @@ client
     console.log("Logged in successfully");
     await SoundCloud.connect();
     deploy(client);
-    fetchRiotVersionData().then(() => console.log("Fetched latest Riot user-agent!"));
+    gameVersion = fetchRiotVersionData();
+    if (gameVersion) {
+      console.log("Fetched latest Riot user-agent!");
+    } else {
+      console.log("FAILED to fetch latest Riot user-agent!");
+    }
+    getSkinList(gameVersion).then(() => console.log("Fetched skin list!"));
     client.on("interactionCreate", async (interaction) => {
       if (!interaction.isCommand() || !interaction.guildId) return;
       try {
