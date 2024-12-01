@@ -33,27 +33,47 @@ export const embedShopMessage = (interaction: CommandInteraction, user: any, sho
     })
     .setDescription(`Expired in **${remainingTime(shop.offers.expires)}**`);
 
-  const offerItems = shop.offers.offers;
+  const offerItems = shop.offers.daily_offers;
 
   const item0Embed = new EmbedBuilder()
     .setColor(colorMap[skins["skins"][offerItems[0]]["rarity"]])
     .setTitle(skins["skins"][offerItems[0]]["names"]["es-ES"])
-    .setImage(skins["skins"][offerItems[0]]["icon"]);
+    .setImage(skins["skins"][offerItems[0]]["icon"])
+    .addFields({
+      name: "Price",
+      value: `${shop.offers.daily_items[0].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP)`,
+      inline: true,
+    });
 
   const item1Embed = new EmbedBuilder()
     .setColor(colorMap[skins["skins"][offerItems[1]]["rarity"]])
     .setTitle(skins["skins"][offerItems[1]]["names"]["es-ES"])
-    .setImage(skins["skins"][offerItems[1]]["icon"]);
+    .setImage(skins["skins"][offerItems[1]]["icon"])
+    .addFields({
+      name: "Price",
+      value: `${shop.offers.daily_items[1].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP)`,
+      inline: true,
+    });
 
   const item2Embed = new EmbedBuilder()
     .setColor(colorMap[skins["skins"][offerItems[2]]["rarity"]])
     .setTitle(skins["skins"][offerItems[2]]["names"]["es-ES"])
-    .setImage(skins["skins"][offerItems[2]]["icon"]);
+    .setImage(skins["skins"][offerItems[2]]["icon"])
+    .addFields({
+      name: "Price",
+      value: `${shop.offers.daily_items[2].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP)`,
+      inline: true,
+    });
 
   const item3Embed = new EmbedBuilder()
     .setColor(colorMap[skins["skins"][offerItems[3]]["rarity"]])
     .setTitle(skins["skins"][offerItems[3]]["names"]["es-ES"])
-    .setImage(skins["skins"][offerItems[3]]["icon"]);
+    .setImage(skins["skins"][offerItems[3]]["icon"])
+    .addFields({
+      name: "Price",
+      value: `${shop.offers.daily_items[3].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP)`,
+      inline: true,
+    });
 
   return [mainEmbed, item0Embed, item1Embed, item2Embed, item3Embed];
 };

@@ -65,60 +65,21 @@ export const getUser = (id: any, account = null) => {
 };
 
 export const addUser = (user: any) => {
-  const userJson = readUserJson(user.id);
-  if (userJson) {
-    // check for duplicate accounts
-    let foundDuplicate = false;
-    for (let i = 0; i < userJson.accounts.length; i++) {
-      if (userJson.accounts[i].puuid === user.puuid) {
-        const oldUser = userJson.accounts[i];
-
-        // merge the accounts
-        userJson.accounts[i] = user;
-        userJson.currentAccount = i + 1;
-
-        // copy over data from old account
-        user.alerts = removeDupeAlerts(oldUser.alerts.concat(userJson.accounts[i].alerts));
-        user.lastFetchedData = oldUser.lastFetchedData;
-        user.lastNoticeSeen = oldUser.lastNoticeSeen;
-        user.lastSawEasterEgg = oldUser.lastSawEasterEgg;
-
-        foundDuplicate = true;
-      }
-    }
-
-    if (!foundDuplicate) {
-      userJson.accounts.push(user);
-      userJson.currentAccount = userJson.accounts.length;
-    }
-
-    saveUserJson(user.id, userJson);
-  } else {
-    const objectToWrite = {
-      accounts: [user],
-      currentAccount: 1,
-      settings: defaultSettings,
-    };
-    saveUserJson(user.id, objectToWrite);
-  }
+  const objectToWrite = {
+    accounts: [user],
+    currentAccount: 1,
+    settings: defaultSettings,
+  };
+  saveUserJson(user.id, objectToWrite);
 };
 
 export const saveUser = (user: any, account = null) => {
   if (!fs.existsSync("val-data/users")) fs.mkdirSync("val-data/users");
 
-  const userJson = readUserJson(user.id);
-  if (!userJson) {
-    const objectToWrite = {
-      accounts: [user],
-      currentAccount: 1,
-      settings: defaultSettings,
-    };
-    saveUserJson(user.id, objectToWrite);
-  } else {
-    if (!account) account = userJson.accounts.findIndex((a: any) => a.puuid === user.puuid) + 1 || userJson.currentAccount;
-    if (account && account > userJson.accounts.length) account = userJson.accounts.length;
-
-    userJson.accounts[(account || userJson.currentAccount) - 1] = user;
-    saveUserJson(user.id, userJson);
-  }
+  const objectToWrite = {
+    accounts: [user],
+    currentAccount: 1,
+    settings: defaultSettings,
+  };
+  saveUserJson(user.id, objectToWrite);
 };

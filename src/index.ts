@@ -24,7 +24,7 @@ export const discordTag = (id: any) => {
   return user ? `${user.username}#${user.discriminator}` : id;
 };
 
-let gameVersion: any = null;
+export let gameVersion: any = null;
 
 console.log("Starting bot...");
 

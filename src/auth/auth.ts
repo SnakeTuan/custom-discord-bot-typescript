@@ -128,7 +128,7 @@ export const authUser = async (id: string, account = null) => {
   // doesn't check if token is valid, only checks it hasn't expired
   console.log("checking if token is expired...");
   const user = getUser(id);
-  console.log("user: ", user);
+  // console.log("user: ", user);
   if (!user || !user.auth || !user.auth.rso) {
     console.log("no user or auth or rso");
     return { success: false };

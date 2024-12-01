@@ -42,7 +42,8 @@ export const addShopCache = (puuid: any, shopJson: any) => {
   console.log("Creating shop cache.....");
   const shopCache = {
     offers: {
-      offers: shopJson.SkinsPanelLayout.SingleItemOffers,
+      daily_offers: shopJson.SkinsPanelLayout.SingleItemOffers,
+      daily_items: shopJson.SkinsPanelLayout.SingleItemStoreOffers,
       expires: Math.floor(now / 1000) + shopJson.SkinsPanelLayout.SingleItemOffersRemainingDurationInSeconds,
       accessory: {
         offers: (shopJson.AccessoryStore.AccessoryStoreOffers || []).map((rawAccessory: any) => {

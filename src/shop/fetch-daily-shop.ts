@@ -49,22 +49,8 @@ export const getShop = async (id: string, account = null) => {
 
   // console.log("fetching shop response: ", json);
 
-  // shop stats tracking
-  // try {
-  //   addStore(user.puuid, json.SkinsPanelLayout.SingleItemOffers);
-  // } catch (e) {
-  //   console.error("Error adding shop stats!");
-  //   console.error(e);
-  //   console.error(json);
-  // }
-
   // add to shop cache
   addShopCache(user.puuid, json);
-
-  // // save bundle data & prices
-  // Promise.all(json.FeaturedBundle.Bundles.map((rawBundle) => formatBundle(rawBundle))).then(async (bundles) => {
-  //   for (const bundle of bundles) await addBundleData(bundle);
-  // });
 
   return { success: true, shop: json };
 };

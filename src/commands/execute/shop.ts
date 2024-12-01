@@ -5,6 +5,7 @@ import { getShopCache } from "@/caches/shop-cache";
 import { loadSkinsList } from "@/caches/save-skin";
 import messages from "@/collections/messages";
 import { embedShopMessage } from "@/shop/embed-shop-message";
+import { gameVersion } from "@/index";
 
 export const shop = {
   name: "shop",
@@ -12,17 +13,23 @@ export const shop = {
     await interaction.deferReply();
 
     const user = getUser(interaction.user.id);
-    let shop = null;
 
-    shop = getShopCache(user.puuid);
-    if (!shop) {
-      shop = await fetchShop(interaction);
+    if (!user) {
+      await interaction.followUp("You haven't logged in yet.");
+      return;
     }
 
-    console.log("shopResult: ", shop);
+    let shop = null;
 
     try {
-      const skinIds = shop.offers.offers.slice(0, 4); // Get the first 4 offers
+      shop = getShopCache(user.puuid);
+      if (!shop) {
+        shop = await fetchShop(interaction);
+      }
+
+      console.log("shopResult: ", shop);
+
+      const skinIds = shop.offers.daily_offers.slice(0, 4); // Get the first 4 offers
 
       console.log("skinIds: ", skinIds);
       const skinsData = await loadSkinsList();
