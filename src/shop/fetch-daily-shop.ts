@@ -11,11 +11,11 @@ export const fetchShop = async (interaction: CommandInteraction) => {
 
   let shop = await getShop(interaction.user.id);
 
-  if (!shop.success) {
-    return null;
+  if (!shop) {
+    return false;
   }
 
-  return shop.shop;
+  return true;
   // return await renderOffers(shop, interaction, user, await emojiPromise, targetId);
 };
 
@@ -23,7 +23,7 @@ export const getShop = async (id: string, account = null) => {
   const authSuccess = await authUser(id, account);
   console.log("authSuccess: ", authSuccess);
   if (!authSuccess.success) {
-    return authSuccess;
+    return false;
   }
   const user = getUser(id, account);
   console.log(`Fetching shop for ${user.username}...`);
@@ -44,7 +44,7 @@ export const getShop = async (id: string, account = null) => {
 
   if (json.httpStatus === 400 && json.errorCode === "BAD_CLAIMS") {
     deleteUserAuth(user);
-    return { success: false };
+    return false;
   }
 
   // console.log("fetching shop response: ", json);
@@ -52,5 +52,5 @@ export const getShop = async (id: string, account = null) => {
   // add to shop cache
   addShopCache(user.puuid, json);
 
-  return { success: true, shop: json };
+  return true;
 };

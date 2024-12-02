@@ -25,6 +25,11 @@ export const shop = {
       shop = getShopCache(user.puuid);
       if (!shop) {
         shop = await fetchShop(interaction);
+        if (!shop) {
+          console.error("Error fetching shop");
+          await interaction.followUp("No current shop offers available.");
+        }
+        shop = getShopCache(user.puuid);
       }
 
       console.log("shopResult: ", shop);

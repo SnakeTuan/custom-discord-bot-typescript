@@ -28,7 +28,7 @@ export const embedShopMessage = (interaction: CommandInteraction, user: any, sho
   const mainEmbed = new EmbedBuilder()
     .setColor(0x1abc9c)
     .setAuthor({
-      name: `${interaction.user.username}'s Daily Shop`,
+      name: `${user.username}'s Daily Shop`,
       iconURL: interaction.user.displayAvatarURL(),
     })
     .setDescription(`Expired in **${remainingTime(shop.offers.expires)}**`);
@@ -41,7 +41,7 @@ export const embedShopMessage = (interaction: CommandInteraction, user: any, sho
     .setImage(skins["skins"][offerItems[0]]["icon"])
     .addFields({
       name: "Price",
-      value: `${shop.offers.daily_items[0].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP)`,
+      value: `${shop.offers.daily_items[0].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP`,
       inline: true,
     });
 
@@ -51,7 +51,7 @@ export const embedShopMessage = (interaction: CommandInteraction, user: any, sho
     .setImage(skins["skins"][offerItems[1]]["icon"])
     .addFields({
       name: "Price",
-      value: `${shop.offers.daily_items[1].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP)`,
+      value: `${shop.offers.daily_items[1].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP`,
       inline: true,
     });
 
@@ -61,7 +61,7 @@ export const embedShopMessage = (interaction: CommandInteraction, user: any, sho
     .setImage(skins["skins"][offerItems[2]]["icon"])
     .addFields({
       name: "Price",
-      value: `${shop.offers.daily_items[2].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP)`,
+      value: `${shop.offers.daily_items[2].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP`,
       inline: true,
     });
 
@@ -71,7 +71,7 @@ export const embedShopMessage = (interaction: CommandInteraction, user: any, sho
     .setImage(skins["skins"][offerItems[3]]["icon"])
     .addFields({
       name: "Price",
-      value: `${shop.offers.daily_items[3].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP)`,
+      value: `${shop.offers.daily_items[3].Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"]} VP`,
       inline: true,
     });
 
